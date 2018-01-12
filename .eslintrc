@@ -1,0 +1,25 @@
+{
+  "extends": "eslint-config-google",
+  "parserOptions": {
+    "ecmaVersion": 7
+  },
+  "rules": {
+    "quotes": ["error", "double"],
+    "require-jsdoc": ["error", {
+      "require": {
+          "FunctionDeclaration": false,
+          "MethodDefinition": false,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+      }
+    }],
+    "object-curly-spacing": ["error", "always"],
+    "max-len": ["error", {
+      "ignoreTemplateLiterals": true,
+      "ignoreStrings": true,
+      "ignoreRegExpLiterals": true
+    }],
+    "comma-dangle": ["error", "never"]
+  }
+}
