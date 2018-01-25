@@ -5,22 +5,23 @@ const EventEmitter = require("events").EventEmitter;
 const config = require("./config.js");
 
 class Parser extends EventEmitter {
-  constructor() {
+  constructor(seedId) {
     super();
-    // this.index("130421756-136435140-128025087-147467601-137980388");
+    this.index(seedId);
     this.prefilterFunction = false;
-    setTimeout(() => {
-      this.parse(fs.readFileSync("test.json"));
-    }, 1);
   }
 
   index(nextChangeId) {
     console.time("load");
     console.log(`Loading ${nextChangeId}`);
-    request(`https://www.pathofexile.com/api/public-stash-tabs?id=${nextChangeId}`).then((res) => {
+    request({
+      method: "GET",
+      gzip: true,
+      uri: `https://www.pathofexile.com/api/public-stash-tabs?id=${nextChangeId}`
+    }).then((res) => {
       console.timeEnd("load");
 
-      this.parse(res);
+      let nextChangeId = this.parse(res);
 
       setTimeout((() => {
         this.index(nextChangeId);
@@ -51,10 +52,11 @@ class Parser extends EventEmitter {
 
   parse(data) {
     console.time("parse");
-    const { nextChangeId, stashes } = JSON.parse(data);
+    // eslint-disable-next-line camelcase
+    const { next_change_id, stashes } = JSON.parse(data);
     console.timeEnd("parse");
 
-    console.log(stashes);
+    console.log(`Found ${stashes.length} stashes`);
 
     for (let stash of stashes) {
       const { id, accountName, lastCharacterName } = stash;
@@ -72,7 +74,7 @@ class Parser extends EventEmitter {
       }
     }
 
-    return nextChangeId;
+    return next_change_id;
   }
 }
 

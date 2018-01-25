@@ -1,7 +1,7 @@
 const Parser = require("./");
 const constants = require("./constants.js");
 
-const parser = new Parser();
+const parser = new Parser("136044720-142322424-133609783-153702629-143965596");
 
 parser.setPrefilter((item) => {
   if (!(
@@ -14,13 +14,13 @@ parser.setPrefilter((item) => {
 
   if (!parser.isPrice(item.note)) return false;
 
-  // if (!item.verified) return false;
+  //if (!item.verified) return false;
 
   return true;
 });
 
 parser.on("stash", (stashId) => {
-  console.log(`Updating ${stashId}`);
+  //console.log(`Updating ${stashId}`);
 });
 
 parser.on("item", (item) => {
