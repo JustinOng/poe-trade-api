@@ -3,12 +3,17 @@ const fs = require("fs");
 const EventEmitter = require("events").EventEmitter;
 
 const config = require("./config.js");
+const constants = require("./constants.js");
 
 class Parser extends EventEmitter {
   constructor(seedId) {
     super();
     this.index(seedId);
     this.prefilterFunction = false;
+  }
+
+  static get constants() {
+    return constants;
   }
 
   index(nextChangeId) {

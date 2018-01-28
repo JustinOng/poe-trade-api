@@ -1,9 +1,10 @@
 const Parser = require("./");
-const constants = require("./constants.js");
 
 const parser = new Parser("136044720-142322424-133609783-153702629-143965596");
 
 parser.setPrefilter((item) => {
+  const { constants } = Parser;
+
   if (!(
     item.frameType === constants.frameType.unique ||
     item.frameType === constants.frameType.divinationCard ||
