@@ -20,8 +20,8 @@ parser.setPrefilter((item) => {
   return true;
 });
 
-parser.on("stash", (stashId) => {
-  //console.log(`Updating ${stashId}`);
+parser.on("stash", (stash) => {
+  //console.log(`Updating ${stash.id}`);
 });
 
 parser.on("item", (item) => {

@@ -46,7 +46,6 @@ class Parser extends EventEmitter {
     if (this.prefilterFunction) {
       return this.prefilterFunction(item);
     }
-    console.log("Using default");
 
     return true;
   }
@@ -56,16 +55,12 @@ class Parser extends EventEmitter {
   }
 
   parse(data) {
-    console.time("parse");
     // eslint-disable-next-line camelcase
     const { next_change_id, stashes } = JSON.parse(data);
-    console.timeEnd("parse");
-
-    console.log(`Found ${stashes.length} stashes`);
 
     for (let stash of stashes) {
       const { id, accountName, lastCharacterName } = stash;
-      this.emit("stash", id);
+      this.emit("stash", stash);
       let price = false;
 
       if (this.isPrice(stash.stash)) {
