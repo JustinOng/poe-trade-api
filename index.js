@@ -66,12 +66,18 @@ class Parser extends EventEmitter {
         price = stash.stash;
       }
 
+      const validItems = [];
+
       for (let item of stash.items) {
         if (!this.isPrice(item.note)) item.note = price;
         if (!this.prefilter(item)) continue;
         this.emit("item", item, { id, accountName, lastCharacterName });
+
+        validItems.push(item);
       }
-    
+      
+      stash.items = validItems;
+
       this.emit("stash", stash);
     }
 
