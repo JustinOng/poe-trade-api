@@ -60,7 +60,6 @@ class Parser extends EventEmitter {
 
     for (let stash of stashes) {
       const { id, accountName, lastCharacterName } = stash;
-      this.emit("stash", stash);
       let price = false;
 
       if (this.isPrice(stash.stash)) {
@@ -72,6 +71,8 @@ class Parser extends EventEmitter {
         if (!this.prefilter(item)) continue;
         this.emit("item", item, { id, accountName, lastCharacterName });
       }
+    
+      this.emit("stash", stash);
     }
 
     return next_change_id;
