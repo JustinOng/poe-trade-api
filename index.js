@@ -67,6 +67,16 @@ class Parser extends EventEmitter {
       for (let item of stash.items) {
         item.name = item.name.replace("<<set:MS>><<set:M>><<set:S>>", "");
 
+        if (typeof item.category === "object") {
+          const firstKey = Object.keys(item.category)[0];
+          if (["cards", "jewels", "flasks", "currency", "maps"].indexOf(firstKey) > -1) {
+            item.category = firstKey;
+          }
+          else {
+            item.category = Object.values(item.category)[0][0];
+          }
+        }
+        
         if (!this.isPrice(item.note)) item.note = price;
         if (!this.prefilter(item)) continue;
         this.emit("item", item, { id, accountName, lastCharacterName });
