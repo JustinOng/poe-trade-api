@@ -17,15 +17,11 @@ class Parser extends EventEmitter {
   }
 
   index(nextChangeId) {
-    console.time("load");
-    console.log(`Loading ${nextChangeId}`);
     request({
       method: "GET",
       gzip: true,
       uri: `https://www.pathofexile.com/api/public-stash-tabs?id=${nextChangeId}`
     }).then((res) => {
-      console.timeEnd("load");
-
       let nextChangeId = this.parse(res);
 
       setTimeout((() => {
@@ -81,6 +77,7 @@ class Parser extends EventEmitter {
       this.emit("stash", stash);
     }
 
+    // eslint-disable-next-line camelcase
     return next_change_id;
   }
 }
