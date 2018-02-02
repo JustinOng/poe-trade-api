@@ -18,11 +18,13 @@ class Parser extends EventEmitter {
 
   index(nextChangeId) {
     this.emit("nextChangeId", nextChangeId);
+    this.emit("loading");
     request({
       method: "GET",
       gzip: true,
       uri: `https://www.pathofexile.com/api/public-stash-tabs?id=${nextChangeId}`
     }).then((res) => {
+      this.emit("loaded");
       let nextChangeId = this.parse(res);
 
       setTimeout((() => {
