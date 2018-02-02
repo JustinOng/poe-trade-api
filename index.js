@@ -17,6 +17,7 @@ class Parser extends EventEmitter {
   }
 
   index(nextChangeId) {
+    this.emit("nextChangeId", nextChangeId);
     request({
       method: "GET",
       gzip: true,
