@@ -26,6 +26,13 @@ class Parser extends EventEmitter {
     }).then((res) => {
       this.emit("loaded");
       let nextChangeId = this.parse(res);
+      this.emit("parsed");
+
+      setTimeout((() => {
+        this.index(nextChangeId);
+      }), 1000);
+    }).catch((err) => {
+      this.emit("error", err);
 
       setTimeout((() => {
         this.index(nextChangeId);
