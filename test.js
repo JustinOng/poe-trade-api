@@ -21,11 +21,11 @@ parser.setPrefilter((item) => {
 });
 
 parser.on("stash", (stash) => {
-  //console.log(`Updating ${stash.id}`);
+  console.log("updating", stash);
 });
 
 parser.on("item", (item) => {
-  console.log("Item:", item);
+  //console.log("Item:", item);
 })
 
 setInterval(()=>{}, 1000);

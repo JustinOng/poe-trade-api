@@ -17,7 +17,6 @@ class Parser extends EventEmitter {
   }
 
   index(nextChangeId) {
-    this.emit("nextChangeId", nextChangeId);
     this.emit("loading");
     request({
       method: "GET",
@@ -25,7 +24,10 @@ class Parser extends EventEmitter {
       uri: `https://www.pathofexile.com/api/public-stash-tabs?id=${nextChangeId}`
     }).then((res) => {
       this.emit("loaded");
+      const curChangeId = nextChangeId;
       let nextChangeId = this.parse(res);
+
+      this.emit("nextChangeId", curChangeId);
       this.emit("parsed");
 
       setTimeout((() => {
@@ -81,19 +83,18 @@ class Parser extends EventEmitter {
           const firstKey = Object.keys(item.category)[0];
           if (["cards", "jewels", "flasks", "currency", "maps"].indexOf(firstKey) > -1) {
             item.category = firstKey;
-          }
-          else {
+          } else {
             item.category = Object.values(item.category)[0][0];
           }
         }
-        
+
         if (!this.isPrice(item.note)) item.note = price;
         if (!this.prefilter(item)) continue;
         this.emit("item", item, { id, accountName, lastCharacterName });
 
         validItems.push(item);
       }
-      
+
       stash.items = validItems;
 
       this.emit("stash", stash);
