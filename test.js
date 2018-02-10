@@ -15,17 +15,17 @@ parser.setPrefilter((item) => {
 
   if (!parser.isPrice(item.note)) return false;
 
-  //if (!item.verified) return false;
+  // if (!item.verified) return false;
 
   return true;
 });
 
 parser.on("stash", (stash) => {
-  console.log("updating", stash);
+  // console.log("updating", stash);
 });
 
 parser.on("item", (item) => {
-  //console.log("Item:", item);
-})
+  console.log(item.price);
+});
 
 setInterval(()=>{}, 1000);

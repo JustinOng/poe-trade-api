@@ -5,6 +5,13 @@ const EventEmitter = require("events").EventEmitter;
 const config = require("./config.js");
 const constants = require("./constants.js");
 
+const currencyTypeMap = {
+  cartographer: "chisel",
+  fusing: "fuse",
+  gemcutter: "gcp",
+  exalted: "exa"
+};
+
 class Parser extends EventEmitter {
   constructor(seedId) {
     super();
@@ -18,13 +25,13 @@ class Parser extends EventEmitter {
 
   index(nextChangeId) {
     this.emit("loading");
+    const curChangeId = nextChangeId;
     request({
       method: "GET",
       gzip: true,
       uri: `https://www.pathofexile.com/api/public-stash-tabs?id=${nextChangeId}`
     }).then((res) => {
       this.emit("loaded");
-      const curChangeId = nextChangeId;
       let nextChangeId = this.parse(res);
 
       this.emit("nextChangeId", curChangeId);
@@ -90,6 +97,20 @@ class Parser extends EventEmitter {
 
         if (!this.isPrice(item.note)) item.note = price;
         if (!this.prefilter(item)) continue;
+
+        if (this.isPrice(item.note)) {
+          const match = item.note.match(config.priceRegex);
+
+          item.price = {
+            quantity: parseInt(match[2], 10),
+            type: match[3]
+          };
+
+          if (currencyTypeMap[item.price.type]) {
+            item.price.type = currencyTypeMap[item.price.type];
+          }
+        }
+
         this.emit("item", item, { id, accountName, lastCharacterName });
 
         validItems.push(item);
